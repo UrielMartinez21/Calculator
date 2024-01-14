@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/inicio.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a la calculadora</h1>
+        <div>
+            <input type="text" name="entrada" id="entrada" placeholder="Resultado" readonly>
+        </div>
+        <div>
+            <button name="numero" value="1">1</button>
+            <button name="numero" value="2">2</button>
+            <button name="numero" value="3">3</button>
+            <button name="operador" value="+">+</button>
+        </div>
+
+        <div>
+            <button name="numero" value="4">4</button>
+            <button name="numero" value="5">5</button>
+            <button name="numero" value="6">6</button>
+            <button name="operador" value="-">-</button>
+        </div>
+
+        <div>
+            <button name="numero" value="7">7</button>
+            <button name="numero" value="8">8</button>
+            <button name="numero" value="9">9</button>
+            <button name="operador" value="*">*</button>
+        </div>
+
+        <div>
+            <button name="numero" value="1">0</button>
+            <button name="operador" value="/">/</button>
+            <button name="operador" value="=">=</button>
+            <button name="operador" value="C">C</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var entradaCampo = document.getElementById('entrada');
+
+            var botones = document.querySelectorAll('button');
+            botones.forEach(function (boton) {
+                boton.addEventListener('click', function () {
+                    // Concatenar el valor del botón a la entrada actual
+                    entradaCampo.value += boton.value;
+                });
+            });
+
+            // Manejar el clic del botón "C" para borrar la entrada
+            document.querySelector('button[value="C"]').addEventListener('click', function () {
+                entradaCampo.value = '';
+            });
+
+            // Manejar el clic del botón "=" para evaluar la expresión
+            document.querySelector('button[value="="]').addEventListener('click', function () {
+                try {
+                    // Obtener la expresión ingresada por el usuario
+                    var expresion = entradaCampo.value;
+                    // No contar el ultimo caracter si es un operador
+                    if (['='].includes(expresion.slice(-1))) {
+                        expresion = expresion.slice(0, -1);
+                    }
+
+                    // Evaluar la expresión matemática con math.js
+                    var resultado = math.evaluate(expresion);
+
+                    // Mostrar el resultado en la entrada
+                    entradaCampo.value = resultado;
+                } catch (error) {
+                    // Manejar errores si la expresión es inválida
+                    entradaCampo.value = 'Error';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
